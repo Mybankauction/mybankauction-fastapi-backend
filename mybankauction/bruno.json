@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "mybankauction",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
