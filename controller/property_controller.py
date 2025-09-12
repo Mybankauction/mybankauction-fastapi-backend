@@ -3,7 +3,7 @@ from models.properties_model import Property
 from utility.date_formater import parse_date
 async def get_properties(page) -> list:
      properties_list = []
-     page_limit = 10
+     page_limit = 12
 
      try:
          skip = (page - 1) * page_limit
@@ -15,7 +15,7 @@ async def get_properties(page) -> list:
              .to_list()
          )
          count = await Property.find_all().count()
-         pagination = (count + page_limit- 1) // 10
+         pagination = (count + page_limit- 1) // 12
 
          for prop in properties:
              pro = prop.model_dump(by_alias=True)  # convert Beanie Document → dict
@@ -37,12 +37,19 @@ async def get_properties(page) -> list:
 
 
 async def filter_properties(filters,page) -> dict:
-    limit = 10
+    limit = 12
     skip_count = (page -1)*limit
     try:
         if filters.get('auction_id') is not None:
-            result= await Property.find_one({"Auction Id": filters['auction_id']})
-            return {"status": 200, "data": result}
+            print("IM executing from the filter")
+            result = await Property.find_one({ "Auction Id": filters['auction_id']})
+            if not result:
+                return {"status": 404, "message": "Property not found"}
+            prop = result.model_dump(by_alias=True)
+            prop["_id"] = str(prop["_id"])
+            prop["auction_start_date"] = prop["auction_start_date"].strftime("%d-%m-%Y %I:%M %p")
+            prop["auction_end_date"] = prop["auction_end_date"].strftime("%d-%m-%Y %I:%M %p")
+            return {"status":200,"data":prop}
         query = {}
         if filters.get("state"):
             query["State"] = filters["state"]
@@ -83,8 +90,7 @@ async def filter_properties(filters,page) -> dict:
                     data[field] = value.isoformat()
             results_dicts.append(data)
         count = await Property.find(query).count()
-        pagination = (count + limit-1) // 10
-        print(results_dicts)
+        pagination = (count + limit-1) // 12
         return { "status": 200,"data": results_dicts,"pagination": {"page": page,"total_pages": pagination,
         "items": count
     }

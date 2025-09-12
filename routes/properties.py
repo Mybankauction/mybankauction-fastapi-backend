@@ -15,7 +15,7 @@ async def get_property(page:int=Query(1,ge=1)):
 
 @property_router.get('/filtered.properties')
 async def get_filtered_property(
-    auction_id: Optional[int] = Query(default=None),
+    auction_id: Optional[str] = Query(default=None),
     state: str = Query(default="Karnataka"),
     city: Optional[str] = Query(default=None),
     area: Optional[str] = Query(default=None),
