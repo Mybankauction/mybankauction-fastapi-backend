@@ -48,8 +48,9 @@ async def filter_properties(filters,page) -> dict:
                 return {"status": 404, "message": "Property not found"}
             prop = result.model_dump(by_alias=True)
             prop["_id"] = str(prop["_id"])
-            prop["auction_start_date"] = datetime.fromisoformat(prop["auction_start_date"])
-            prop["auction_end_date"] = datetime.fromisoformat(prop["auction_end_date"])
+            for field, value in prop.items():
+                if isinstance(value, datetime):
+                    prop[field] = value.isoformat()
             return {"status":200,"data":prop}
         query = {}
         if filters.get("state"):
