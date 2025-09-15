@@ -26,7 +26,7 @@ class Property(Document):
     sub_end: str = Field(alias="Sub End")
     sale_notice: str = Field(alias="sale_notice")
     asset_category: Optional[str] = Field(default=None,alias="AssetCategory")
-    outstanding_amount: Optional[str] = Field(alias="outstanding_amount")
+    outstanding_amount: Any = Field(alias="outstanding_amount")
     auction_start_date: Any = Field(alias="auction_start_date")
     auction_end_date: Any = Field(alias="auction_end_date")
 

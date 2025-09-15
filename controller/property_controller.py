@@ -39,6 +39,7 @@ async def get_properties(page) -> list:
 async def filter_properties(filters,page) -> dict:
     limit = 12
     skip_count = (page -1)*limit
+    print("query-parametr",filters)
     try:
         if filters.get('auction_id') is not None:
             print("IM executing from the filter")
@@ -47,8 +48,8 @@ async def filter_properties(filters,page) -> dict:
                 return {"status": 404, "message": "Property not found"}
             prop = result.model_dump(by_alias=True)
             prop["_id"] = str(prop["_id"])
-            prop["auction_start_date"] = prop["auction_start_date"].strftime("%d-%m-%Y %I:%M %p")
-            prop["auction_end_date"] = prop["auction_end_date"].strftime("%d-%m-%Y %I:%M %p")
+            prop["auction_start_date"] = datetime.fromisoformat(prop["auction_start_date"])
+            prop["auction_end_date"] = datetime.fromisoformat(prop["auction_end_date"])
             return {"status":200,"data":prop}
         query = {}
         if filters.get("state"):
@@ -80,6 +81,7 @@ async def filter_properties(filters,page) -> dict:
                 price_filter["$lte"] = filters["max_price"]
             query["Reserve Price"] = price_filter
         # Run the query
+        print("Final query",query)
         results = await Property.find(query).skip(skip_count).limit(limit).to_list()
         results_dicts = []
         for prop in results:
