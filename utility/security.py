@@ -20,4 +20,4 @@ def verify_jwt_token(secret_key,token):
         is_token_valid = jwt.decode(token,secret_key,algorithms=[JWT_ALGORITHM])
         return is_token_valid
     except jwt.InvalidTokenError:
-        return {"status_code":401,"message":"Invalid token"}
+        return None

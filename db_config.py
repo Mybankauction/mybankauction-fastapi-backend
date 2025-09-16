@@ -7,13 +7,15 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from models.properties_model import Property
 from models.register_model import RegisterDb
 from models.login_model import LoginModel
+from models.interested_model import InterestedModel
+
 
 
 async def init_db():
     try:
         client = AsyncIOMotorClient(os.getenv("DATABASE_URL"))
         database = client.Zbot
-        await init_beanie(database=database, document_models=[Property,RegisterDb,LoginModel])
+        await init_beanie(database=database, document_models=[Property,RegisterDb,LoginModel,InterestedModel])
         print("Database initialized")
     except Exception as e:
         print("Database initialization failed", e)
