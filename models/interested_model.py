@@ -5,7 +5,7 @@ from pydantic import BaseModel, field_validator, ValidationError
 class InterestedModel(Document):
     user_id:str
     properties:list[str]
-    phone_number:str
+    phone_number:str=''
 
     class Settings():
         name= "interested_users"
