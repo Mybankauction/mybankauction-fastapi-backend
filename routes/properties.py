@@ -1,5 +1,4 @@
 import os
-from urllib import request
 from typing import Optional
 from fastapi import APIRouter,Request
 from fastapi.params import Query

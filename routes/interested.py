@@ -1,8 +1,8 @@
 import os
-
 from fastapi import APIRouter,Request
 from starlette.responses import JSONResponse
 from controller.interested_controller import push_interested_property,get_interested_property
+from models.interested_model import Interested
 from utility.security import verify_jwt_token
 from dotenv import load_dotenv
 load_dotenv()
@@ -10,7 +10,7 @@ interested_route = APIRouter()
 
 
 @interested_route.post("/interested-property")
-async def interested_property(request:Request):
+async def interested_property(request:Request,body:Interested):
     jwt_token = request.headers.get("Authorization")
     if jwt_token is None:
         return JSONResponse({"message":"No JWT token provided"},status_code=401)
@@ -18,9 +18,9 @@ async def interested_property(request:Request):
     if is_token_valid is None:
         return JSONResponse({"message":"Invalid JWT token"},status_code=401)
     else:
-        body = await request.json()
-        property_id = body["property_id"]
-        result = await push_interested_property(user_id=is_token_valid.get('user_id'),property_id=property_id)
+        property_id = body.property_id
+        phone_number = body.phone_number
+        result = await push_interested_property(user_id=is_token_valid.get('user_id'),property_id=property_id,phone_number=phone_number)
         return JSONResponse(content=result.get("message"),status_code=result.get("status_code"))
 
 
