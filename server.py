@@ -1,4 +1,3 @@
-import secrets
 import fastapi
 import uvicorn
 from fastapi import FastAPI
@@ -28,6 +27,3 @@ app.add_middleware(CORSMiddleware,
     allow_methods=["*"],          # Allow all HTTP methods (GET, POST, etc.)
     allow_headers=["*"],
                    )# Allow all headers)
-
-if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
