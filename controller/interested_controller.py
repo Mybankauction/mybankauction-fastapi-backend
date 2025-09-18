@@ -34,7 +34,7 @@ async def get_interested_property(user_id):
     #check if the user has liked properries or not
     try:
         result_list=list()
-        interested = InterestedModel(user_id=user_id,properties=[""])
+        interested = InterestedModel(user_id=user_id,properties=[""],phone_number='')
         is_user_interested_property = await interested.find_one({"user_id": user_id})
         print(is_user_interested_property)
         if is_user_interested_property:
