@@ -7,7 +7,11 @@ class User(BaseModel):
 
 
 class LoginModel(Document):
+    full_name:str=''
     email: str
     hashed_password: str
+    phone_number: str=''
+    class Config:
+        orm_mode = True
     class Settings:
         name = "users"

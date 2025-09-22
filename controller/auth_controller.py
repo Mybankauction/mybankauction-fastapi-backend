@@ -18,7 +18,8 @@ async def register_user(register):
         new_user = RegisterDb(
             full_name=register.full_name,
             email=register.email,
-            hashed_password=hashed_password
+            hashed_password=hashed_password,
+            phone_number=register.phone_number,
         )
         try:
             insertion_result = await new_user.insert()
@@ -43,10 +44,10 @@ async def login(user):
              is_password_correct = verify_password(password,hashed_password)
              if is_password_correct:
                  user_dict = is_user.model_dump()
-                 obj_id = ObjectId(user_dict["id"])
-                 user_id = str(obj_id)
-                 token = generate_jwt_token(os.getenv("SECRET"),{"user_id":user_id})
-                 return {"status_code":200,"message":{"login_success_message":True,"token":token}}
+                 obj_id = user_dict["id"]
+                 token = generate_jwt_token(os.getenv("SECRET"),{"user_id":str(obj_id)})
+                 print(token)
+                 return {"status_code":200,"message":{"login_success_message":True,"token":token,"user_profile":{"email":user_dict.get('email'),"full_name":user_dict.get('full_name'),"phone_number":user_dict.get('phone_number')}}}
              else:
                  return {"status_code":401, "message":"Incorrect password"}
     except Exception as e:

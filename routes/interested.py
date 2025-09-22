@@ -19,8 +19,7 @@ async def interested_property(request:Request,body:Interested):
         return JSONResponse({"message":"Invalid JWT token"},status_code=401)
     else:
         property_id = body.property_id
-        phone_number = body.phone_number
-        result = await push_interested_property(user_id=is_token_valid.get('user_id'),property_id=property_id,phone_number=phone_number)
+        result = await push_interested_property(user_id=is_token_valid.get('user_id'),property_id=property_id)
         return JSONResponse(content=result.get("message"),status_code=result.get("status_code"))
 
 

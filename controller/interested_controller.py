@@ -3,9 +3,9 @@ from datetime import datetime
 from models.interested_model import InterestedModel
 from models.properties_model import Property
 from bson import ObjectId
-async def push_interested_property(user_id, property_id,phone_number):
+async def push_interested_property(user_id, property_id):
     try:
-        interested = InterestedModel(user_id=user_id,properties=[property_id],phone_number=phone_number)
+        interested = InterestedModel(user_id=user_id,properties=[property_id])
         # check if user document already exists
         is_new = await interested.find_one({"user_id": user_id})
         if is_new:
@@ -19,9 +19,7 @@ async def push_interested_property(user_id, property_id,phone_number):
                 return {"status_code": 200, "message": "property already added to Interested List"}
 
         else:
-            # create a new document for the user
-            if phone_number == '':
-                return {"status_code": 400, "message": "Phone number not provided"}
+            # add the new interested property to the new user
             await interested.save()
             return {"status_code": 201, "message": "property successfully added to Interested List"}
 
