@@ -1,5 +1,4 @@
 import os
-from bson import ObjectId
 from models.register_model import RegisterDb
 from models.login_model import LoginModel
 from utility.security import get_hashed_password,verify_password,generate_jwt_token

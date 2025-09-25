@@ -3,6 +3,9 @@ from datetime import datetime
 from models.interested_model import InterestedModel
 from models.properties_model import Property
 from bson import ObjectId
+
+
+
 async def push_interested_property(user_id, property_id):
     try:
         interested = InterestedModel(user_id=user_id,properties=[property_id])
@@ -54,3 +57,25 @@ async def get_interested_property(user_id):
     except Exception as e:
         print("Error happened at get_interested_property", e)
         return {"status_code": 500, "message": "Internal server error"}
+
+
+async def delete_interested_property(user_id,property_id):
+    try:
+        interested = InterestedModel(user_id=user_id,properties=[property_id])
+        is_user = await interested.find_one({"user_id": user_id})
+        if not is_user:
+            return {"status_code": 200, "message": "No property is added as interested property"}
+        else:
+            if property_id not in is_user.properties:
+                return {"status_code": 200, "message": "No such property exists"}
+            else:
+                await is_user.update({"$pull": {"properties": property_id}})
+                return {"status_code": 200, "message": "property successfully deleted from Interested List"}
+    except Exception as e:
+        print("Error happened at delete_interested_property", e)
+        return {"status_code": 500, "message": "Internal server error"}
+
+
+
+
+
