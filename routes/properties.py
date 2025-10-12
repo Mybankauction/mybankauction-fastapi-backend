@@ -12,12 +12,6 @@ property_router = APIRouter()
 
 @property_router.get('/properties')
 async def get_property(request:Request,page:int=Query(1,ge=1)):
-    jwt_token = request.headers.get("Authorization")
-    if jwt_token is None:
-        return JSONResponse({"message": "No JWT token provided"}, status_code=401)
-    is_token_valid = verify_jwt_token(token=jwt_token, secret_key=os.getenv("SECRET"))
-    if is_token_valid is None:
-        return JSONResponse({"message": "Invalid JWT token"}, status_code=401)
     result = await get_properties(page=page)
     return JSONResponse(result)
 
